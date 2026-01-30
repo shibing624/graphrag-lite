@@ -43,4 +43,4 @@ jobs:
 
       - name: Run tests
         run: |
-          python -c "from nanographrag import NanoGraphRAG; print('Import OK')"
+          python -m pytest tests/ -v --tb=short

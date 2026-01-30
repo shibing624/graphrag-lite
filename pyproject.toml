@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "nanographrag"
-version = "0.1.0"
+name = "graphrag-lite"
+version = "0.1.1"
 description = "A minimal GraphRAG implementation in ~600 lines of Python code"
 readme = "README.md"
 license = {text = "Apache License 2.0"}
@@ -16,7 +16,7 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: Apache License 2.0 License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -40,14 +40,14 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/shibing624/nanographrag"
-Repository = "https://github.com/shibing624/nanographrag"
-Documentation = "https://github.com/shibing624/nanographrag#readme"
-Issues = "https://github.com/shibing624/nanographrag/issues"
+Homepage = "https://github.com/shibing624/graphrag-lite"
+Repository = "https://github.com/shibing624/graphrag-lite"
+Documentation = "https://github.com/shibing624/graphrag-lite#readme"
+Issues = "https://github.com/shibing624/graphrag-lite/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["nanographrag*"]
+include = ["graphrag_lite*"]
 
 [tool.ruff]
 line-length = 120

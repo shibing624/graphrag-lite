@@ -1,7 +1,7 @@
-# NanoGraphRAG
+# GraphRAG-Lite
 
 <p align="center">
-  <img src="docs/logo.svg" alt="NanoGraphRAG Logo" width="400">
+  <img src="https://github.com/shibing624/graphrag-lite/blob/main/docs/logo.svg" alt="GraphRAG-Lite Logo" width="400">
 </p>
 
 <p align="center">
@@ -9,17 +9,17 @@
 </p>
 
 <p align="center">
-  <a href="https://badge.fury.io/py/nanographrag"><img src="https://badge.fury.io/py/nanographrag.svg" alt="PyPI version"></a>
+  <a href="https://badge.fury.io/py/graphrag-lite"><img src="https://badge.fury.io/py/graphrag-lite.svg" alt="PyPI version"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python 3.10+"></a>
   <a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License: Apache 2.0"></a>
-  <a href="https://github.com/shibing624/nanographrag/blob/main/README.md"><img src="https://img.shields.io/badge/wechat-group-green.svg?logo=wechat" alt="Chat Group"></a>
+  <a href="https://github.com/shibing624/graphrag-lite/blob/main/README.md"><img src="https://img.shields.io/badge/wechat-group-green.svg?logo=wechat" alt="Chat Group"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/shibing624/nanographrag/blob/main/README_zh.md">中文文档</a>
+  <a href="https://github.com/shibing624/graphrag-lite/blob/main/README_zh.md">中文文档</a>
 </p>
 
-NanoGraphRAG is a lightweight, educational implementation of GraphRAG (Graph-based Retrieval-Augmented Generation). It's designed to help you understand the core principles of GraphRAG in a single afternoon.
+GraphRAG-Lite is a lightweight, educational implementation of GraphRAG (Graph-based Retrieval-Augmented Generation). It's designed to help you understand the core principles of GraphRAG in a single afternoon.
 
 ## Features
 
@@ -32,14 +32,14 @@ NanoGraphRAG is a lightweight, educational implementation of GraphRAG (Graph-bas
 ## Installation
 
 ```bash
-pip install nanographrag
+pip install graphrag-lite
 ```
 
 Or install from source:
 
 ```bash
-git clone https://github.com/shibing624/nanographrag.git
-cd nanographrag
+git clone https://github.com/shibing624/graphrag-lite.git
+cd graphrag-lite
 pip install -e .
 ```
 
@@ -47,10 +47,10 @@ pip install -e .
 
 ```python
 import os
-from nanographrag import NanoGraphRAG
+from graphrag_lite import GraphRAGLite
 
 # Initialize
-graph = NanoGraphRAG(
+graph = GraphRAGLite(
     storage_path="./my_graph",
     api_key=os.getenv("OPENAI_API_KEY"),
     base_url=os.getenv("OPENAI_BASE_URL"),  # Optional
@@ -94,18 +94,18 @@ for chunk in graph.query("Who is Scrooge?", stream=True):
 
 ## API Reference
 
-### NanoGraphRAG
+### GraphRAGLite
 
 ```python
-NanoGraphRAG(
-    storage_path: str = "./nanograph_data",  # Data storage directory
-    api_key: str = None,                      # OpenAI API key
-    base_url: str = None,                     # OpenAI API base URL
-    model: str = "gpt-4o-mini",               # LLM model
+GraphRAGLite(
+    storage_path: str = "./graphrag_data",  # Data storage directory
+    api_key: str = None,                     # OpenAI API key
+    base_url: str = None,                    # OpenAI API base URL
+    model: str = "gpt-4o-mini",              # LLM model
     embedding_model: str = "text-embedding-3-small",  # Embedding model
-    chunk_size: int = 1200,                   # Text chunk size
-    chunk_overlap: int = 100,                 # Chunk overlap
-    enable_cache: bool = True,                # Enable LLM response caching
+    chunk_size: int = 1200,                  # Text chunk size
+    chunk_overlap: int = 100,                # Chunk overlap
+    enable_cache: bool = True,               # Enable LLM response caching
 )
 ```
 
@@ -124,7 +124,7 @@ NanoGraphRAG(
 ## How It Works
 
 <p align="center">
-  <img src="https://github.com/shibing624/nanographrag/blob/main/docs/workflow.svg" alt="NanoGraphRAG Workflow" width="800">
+  <img src="https://github.com/shibing624/graphrag-lite/blob/main/docs/workflow.svg" alt="GraphRAG-Lite Workflow" width="800">
 </p>
 
 1. **Insert**: Documents are chunked, entities and relations are extracted via LLM, then embedded and stored
@@ -132,8 +132,8 @@ NanoGraphRAG(
 
 ## Comparison with nano-graphrag
 
-| Feature | NanoGraphRAG | nano-graphrag |
-|---------|--------------|---------------|
+| Feature | GraphRAG-Lite | nano-graphrag |
+|---------|---------------|---------------|
 | Code Size | ~600 lines | ~1100 lines |
 | Dependencies | openai, numpy, tiktoken | networkx, nano-vectordb, ... |
 | LLM Support | OpenAI only | Multiple (OpenAI, Ollama, etc.) |
@@ -141,14 +141,14 @@ NanoGraphRAG(
 | Async Support | ❌ | ✅ |
 | Purpose | **Educational** | Production |
 
-NanoGraphRAG is designed for **learning and understanding GraphRAG principles**, not for production use. If you need a production-ready solution, consider [nano-graphrag](https://github.com/gusye1234/nano-graphrag) or [LightRAG](https://github.com/HKUDS/LightRAG).
+GraphRAG-Lite is designed for **learning and understanding GraphRAG principles**, not for production use. If you need a production-ready solution, consider [nano-graphrag](https://github.com/gusye1234/nano-graphrag) or [LightRAG](https://github.com/HKUDS/LightRAG).
 
 ## Community & Support
 
-*   **GitHub Issues**: Have questions or feature requests? [Submit an issue](https://github.com/shibing624/nanographrag/issues).
+*   **GitHub Issues**: Have questions or feature requests? [Submit an issue](https://github.com/shibing624/graphrag-lite/issues).
 *   **WeChat**: Join our developer community! Add WeChat ID `xuming624` with note "llm" to join the group chat.
 
-<img src="https://github.com/shibing624/nanographrag/blob/main/docs/wechat.jpeg" width="200" />
+<img src="https://github.com/shibing624/graphrag-lite/blob/main/docs/wechat.jpeg" width="200" />
 
 ## License
 
@@ -159,10 +159,10 @@ Apache License 2.0
 If you find this project useful, please consider giving it a ⭐ on GitHub!
 
 ```bibtex
-@software{nanographrag,
+@software{graphrag-lite,
   author = {Xu Ming},
-  title = {NanoGraphRAG: Minimal GraphRAG Implementation},
-  year = {2026},
-  url = {https://github.com/shibing624/nanographrag}
+  title = {GraphRAG-Lite: Minimal GraphRAG Implementation},
+  year = {2025},
+  url = {https://github.com/shibing624/graphrag-lite}
 }
 ```

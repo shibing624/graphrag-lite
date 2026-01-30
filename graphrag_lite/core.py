@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 @author:XuMing(xuming624@qq.com)
-@description: nanographrag: 极简 GraphRAG 实现
+@description: graphrag-lite: 极简 GraphRAG 实现
 
 ~600 行代码理解 GraphRAG 核心原理
 
@@ -33,10 +33,10 @@ from .prompts import ENTITY_EXTRACTION_PROMPT, RAG_RESPONSE_PROMPT
 from .utils import chunk_text, top_k_similar
 
 
-class NanoGraphRAG:
+class GraphRAGLite:
     def __init__(
         self,
-        storage_path: str = "./nanograph_storage",
+        storage_path: str = "./graphrag_storage",
         api_key: str = None,
         base_url: str = None,
         model: str = "gpt-4o-mini",
@@ -44,7 +44,7 @@ class NanoGraphRAG:
         enable_cache: bool = True,
     ):
         """
-        初始化 NanoGraphRAG
+        初始化 GraphRAGLite
         
         Args:
             storage_path: 存储路径
@@ -643,7 +643,3 @@ class NanoGraphRAG:
                 p.unlink()
         
         logger.info("[Clear] 数据已清空")
-
-
-# 兼容旧名称
-NanoGraph = NanoGraphRAG

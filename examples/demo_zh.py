@@ -3,7 +3,7 @@
 @author:XuMing(xuming624@qq.com)
 @description: 
 
-nanographrag 中文使用示例
+graphrag-lite 中文使用示例
 
 演示:
 1. 中文文档插入与知识图谱构建
@@ -14,7 +14,7 @@ nanographrag 中文使用示例
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from nanographrag import NanoGraphRAG
+from graphrag_lite import GraphRAGLite
 
 
 SAMPLE_TEXT = """
@@ -36,8 +36,8 @@ SAMPLE_TEXT = """
 
 def main():
     # 初始化
-    graph = NanoGraphRAG(
-        storage_path="./nanograph_demo_zh",
+    graph = GraphRAGLite(
+        storage_path="./graphrag_demo_zh",
         api_key=os.getenv("OPENAI_API_KEY"),
         base_url=os.getenv("OPENAI_BASE_URL"),
         enable_cache=True,
