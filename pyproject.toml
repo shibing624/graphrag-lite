@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nanographrag"
+version = "0.1.0"
+description = "A minimal GraphRAG implementation in ~600 lines of Python code"
+readme = "README.md"
+license = {text = "Apache License 2.0"}
+authors = [
+    {name = "Xu Ming", email = "xuming624@qq.com"}
+]
+keywords = ["graphrag", "rag", "knowledge-graph", "llm", "nlp", "openai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache License 2.0 License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "openai>=1.0.0",
+    "tiktoken>=0.5.0",
+    "numpy>=1.24.0",
+    "loguru>=0.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "ruff>=0.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/shibing624/nanographrag"
+Repository = "https://github.com/shibing624/nanographrag"
+Documentation = "https://github.com/shibing624/nanographrag#readme"
+Issues = "https://github.com/shibing624/nanographrag/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nanographrag*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
