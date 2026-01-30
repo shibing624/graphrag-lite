@@ -1,11 +1,9 @@
-# GraphRAG-Lite
-
 <p align="center">
   <img src="https://github.com/shibing624/graphrag-lite/blob/main/docs/logo.svg" alt="GraphRAG-Lite Logo" width="400">
 </p>
 
 <p align="center">
-  <b>Minimal GraphRAG implementation in ~500 lines of Python code.</b>
+  <b>Lightweight GraphRAG implementation with sync/async APIs and knowledge traceability</b>
 </p>
 
 <p align="center">
@@ -19,23 +17,28 @@
   <a href="https://github.com/shibing624/graphrag-lite/blob/main/README_zh.md">中文文档</a>
 </p>
 
-GraphRAG-Lite is a clean, educational implementation of GraphRAG (Graph-based Retrieval-Augmented Generation). Perfect for learning the core principles of knowledge graph enhanced RAG systems.
+GraphRAG-Lite is a lightweight, educational implementation of GraphRAG (Graph-based Retrieval-Augmented Generation). Perfect for learning the core principles of knowledge graph enhanced RAG systems.
 
 ## Why GraphRAG-Lite?
 
 - **Learn by Reading**: Clean, well-documented code you can understand in an afternoon
 - **Production Patterns**: Real-world optimizations like batch embeddings and LLM caching
+- **Sync/Async APIs**: Both synchronous and asynchronous methods for different use cases
+- **Knowledge Traceability**: Answers include citations to knowledge graph sources
 - **Flexible Retrieval**: 4 query modes for different use cases
-- **Minimal Dependencies**: Just `openai`, `numpy`, `tiktoken`, and `loguru`
+- **Minimal Dependencies**: Just `openai`, `numpy`, `tiktoken`, `loguru`, and `tqdm`
 
 ## Features
 
 | Feature | Description |
 |---------|-------------|
 | **4 Query Modes** | `local`, `global`, `mix`, `naive` - choose the right strategy |
+| **Sync/Async APIs** | `insert`/`ainsert`, `query`/`aquery` dual-mode support |
+| **Knowledge Traceability** | Answers with `[Data: Entities (X); Relationships (Y)]` citations |
 | **Batch Embeddings** | Reduce API calls with intelligent batching |
 | **LLM Caching** | Avoid redundant LLM requests |
-| **Streaming Output** | Real-time response streaming |
+| **Streaming Output** | Real-time response streaming (sync and async) |
+| **Progress Bar** | Visual progress for large document processing |
 | **NumPy Acceleration** | Fast vector similarity search |
 | **Persistent Storage** | JSON-based storage, no external database needed |
 
@@ -54,6 +57,8 @@ pip install -e .
 ```
 
 ## Quick Start
+
+### Synchronous Mode
 
 ```python
 import os
@@ -78,6 +83,30 @@ answer = graph.query("What is the relationship between Scrooge and Marley?")
 print(answer)
 ```
 
+### Asynchronous Mode (Recommended for Large Documents)
+
+```python
+import asyncio
+from graphrag_lite import GraphRAGLite
+
+async def main():
+    graph = GraphRAGLite(storage_path="./my_graph")
+    
+    # Async insert (with progress bar)
+    await graph.ainsert(long_document, show_progress=True)
+    
+    # Async query
+    answer = await graph.aquery("What is the question?")
+    print(answer)
+    
+    # Async streaming
+    stream = await graph.aquery("What is the question?", stream=True)
+    async for chunk in stream:
+        print(chunk, end="", flush=True)
+
+asyncio.run(main())
+```
+
 ## Query Modes
 
 | Mode | Strategy | Best For |
@@ -95,10 +124,25 @@ answer = graph.query("Tell me about the story", mode="mix")      # Recommended
 answer = graph.query("What happened?", mode="naive")
 ```
 
+## Knowledge Traceability
+
+Answers automatically include citations to knowledge graph sources for credibility:
+
+```
+Ebenezer Scrooge is the main character of "A Christmas Carol" [Data: Entities (0)].
+He was the business partner of Jacob Marley [Data: Relationships (1, 2)].
+```
+
 ## Streaming Output
 
 ```python
+# Sync streaming
 for chunk in graph.query("Who is Scrooge?", stream=True):
+    print(chunk, end="", flush=True)
+
+# Async streaming
+stream = await graph.aquery("Who is Scrooge?", stream=True)
+async for chunk in stream:
     print(chunk, end="", flush=True)
 ```
 
@@ -121,8 +165,10 @@ GraphRAGLite(
 
 | Method | Description |
 |--------|-------------|
-| `insert(text, doc_id=None)` | Insert document and build knowledge graph |
-| `query(question, mode="mix", top_k=10, stream=False)` | Query the knowledge graph |
+| `insert(text, doc_id=None)` | Sync insert document |
+| `ainsert(text, doc_id=None, show_progress=True)` | Async insert document (with progress bar) |
+| `query(question, mode="mix", top_k=10, stream=False)` | Sync query |
+| `aquery(question, mode="mix", top_k=10, stream=False)` | Async query |
 | `has_data()` | Check if graph has data |
 | `get_stats()` | Get graph statistics |
 | `list_entities()` | List all entities |
@@ -142,7 +188,7 @@ Document → Chunking → LLM Entity Extraction → Batch Embedding → Storage
 
 **Query Pipeline:**
 ```
-Question → Vector Search → Context Building → LLM Generation → Answer
+Question → Vector Search → Context Building → LLM Generation (with citations) → Answer
 ```
 
 ## Use Cases
@@ -168,7 +214,7 @@ Apache License 2.0
 ```bibtex
 @software{graphrag-lite,
   author = {Xu Ming},
-  title = {GraphRAG-Lite: Minimal GraphRAG Implementation},
+  title = {GraphRAG-Lite: Lightweight GraphRAG Implementation},
   year = {2025},
   url = {https://github.com/shibing624/graphrag-lite}
 }

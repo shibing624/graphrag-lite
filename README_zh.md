@@ -1,11 +1,9 @@
-# GraphRAG-Lite
-
 <p align="center">
   <img src="https://github.com/shibing624/graphrag-lite/blob/main/docs/logo.svg" alt="GraphRAG-Lite Logo" width="400">
 </p>
 
 <p align="center">
-  <b>极简 GraphRAG 实现，约 500 行 Python 代码</b>
+  <b>轻量级 GraphRAG 实现，同步/异步双模式，带知识溯源</b>
 </p>
 
 <p align="center">
@@ -19,23 +17,28 @@
   <a href="https://github.com/shibing624/graphrag-lite/blob/main/README.md">English</a>
 </p>
 
-GraphRAG-Lite 是一个简洁、教学导向的 GraphRAG（基于图的检索增强生成）实现。非常适合学习知识图谱增强 RAG 系统的核心原理。
+GraphRAG-Lite 是一个轻量、教学导向的 GraphRAG（基于图的检索增强生成）实现。非常适合学习知识图谱增强 RAG 系统的核心原理。
 
 ## 为什么选择 GraphRAG-Lite？
 
 - **阅读即学习**：清晰、文档完善的代码，一个下午就能理解
 - **生产级模式**：批量 Embedding、LLM 缓存等真实优化
+- **同步/异步双模式**：支持同步和异步 API，适配不同场景
+- **知识溯源**：回答自动引用知识图谱来源，增强可信度
 - **灵活检索**：4 种查询模式适应不同场景
-- **依赖精简**：仅需 `openai`、`numpy`、`tiktoken`、`loguru`
+- **依赖精简**：仅需 `openai`、`numpy`、`tiktoken`、`loguru`、`tqdm`
 
 ## 特性
 
 | 特性 | 说明 |
 |------|------|
 | **4 种查询模式** | `local`、`global`、`mix`、`naive` - 选择合适的策略 |
+| **同步/异步 API** | `insert`/`ainsert`、`query`/`aquery` 双模式支持 |
+| **知识溯源** | 回答带 `[Data: Entities (X); Relationships (Y)]` 引用 |
 | **批量 Embedding** | 智能批处理减少 API 调用 |
 | **LLM 缓存** | 避免重复的 LLM 请求 |
-| **流式输出** | 实时响应流 |
+| **流式输出** | 实时响应流（同步/异步均支持） |
+| **进度条显示** | 大文档处理时显示进度 |
 | **NumPy 加速** | 快速向量相似度搜索 |
 | **持久化存储** | 基于 JSON 存储，无需外部数据库 |
 
@@ -54,6 +57,8 @@ pip install -e .
 ```
 
 ## 快速开始
+
+### 同步模式
 
 ```python
 import os
@@ -78,6 +83,30 @@ answer = graph.query("贾宝玉和林黛玉是什么关系？")
 print(answer)
 ```
 
+### 异步模式（推荐大文档）
+
+```python
+import asyncio
+from graphrag_lite import GraphRAGLite
+
+async def main():
+    graph = GraphRAGLite(storage_path="./my_graph")
+    
+    # 异步插入（带进度条）
+    await graph.ainsert(long_document, show_progress=True)
+    
+    # 异步查询
+    answer = await graph.aquery("问题是什么？")
+    print(answer)
+    
+    # 异步流式输出
+    stream = await graph.aquery("问题是什么？", stream=True)
+    async for chunk in stream:
+        print(chunk, end="", flush=True)
+
+asyncio.run(main())
+```
+
 ## 查询模式
 
 | 模式 | 策略 | 适用场景 |
@@ -95,10 +124,25 @@ answer = graph.query("介绍一下红楼梦", mode="mix")      # 推荐
 answer = graph.query("发生了什么？", mode="naive")
 ```
 
+## 知识溯源
+
+回答会自动带上知识图谱的引用来源，增强可信度：
+
+```
+贾宝玉是《红楼梦》的主人公 [Data: Entities (0)]。
+他与林黛玉青梅竹马，感情深厚 [Data: Relationships (1, 2)]。
+```
+
 ## 流式输出
 
 ```python
+# 同步流式
 for chunk in graph.query("贾宝玉是谁？", stream=True):
+    print(chunk, end="", flush=True)
+
+# 异步流式
+stream = await graph.aquery("贾宝玉是谁？", stream=True)
+async for chunk in stream:
     print(chunk, end="", flush=True)
 ```
 
@@ -121,8 +165,10 @@ GraphRAGLite(
 
 | 方法 | 说明 |
 |------|------|
-| `insert(text, doc_id=None)` | 插入文档并构建知识图谱 |
-| `query(question, mode="mix", top_k=10, stream=False)` | 查询知识图谱 |
+| `insert(text, doc_id=None)` | 同步插入文档 |
+| `ainsert(text, doc_id=None, show_progress=True)` | 异步插入文档（带进度条） |
+| `query(question, mode="mix", top_k=10, stream=False)` | 同步查询 |
+| `aquery(question, mode="mix", top_k=10, stream=False)` | 异步查询 |
 | `has_data()` | 检查图谱是否有数据 |
 | `get_stats()` | 获取图谱统计信息 |
 | `list_entities()` | 列出所有实体 |
@@ -142,7 +188,7 @@ GraphRAGLite(
 
 **查询流程：**
 ```
-问题 → 向量检索 → 上下文构建 → LLM 生成 → 答案
+问题 → 向量检索 → 上下文构建 → LLM 生成（带引用） → 答案
 ```
 
 ## 应用场景
@@ -168,7 +214,7 @@ Apache License 2.0
 ```bibtex
 @software{graphrag-lite,
   author = {Xu Ming},
-  title = {GraphRAG-Lite: Minimal GraphRAG Implementation},
+  title = {GraphRAG-Lite: Lightweight GraphRAG Implementation},
   year = {2025},
   url = {https://github.com/shibing624/graphrag-lite}
 }
