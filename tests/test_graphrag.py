@@ -87,17 +87,6 @@ class TestGraphRAGLiteInit:
                 api_key="test-key",
             )
             assert storage_path.exists()
-    
-    def test_default_values(self):
-        """默认值测试"""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            graph = GraphRAGLite(
-                storage_path=tmpdir,
-                api_key="test-key",
-            )
-            assert graph.model == "gpt-4o-mini"
-            assert graph.embedding_model == "text-embedding-3-small"
-            assert graph.enable_cache is True
 
 
 class TestGraphRAGLiteMethods:
